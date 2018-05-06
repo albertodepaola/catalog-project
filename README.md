@@ -3,7 +3,7 @@
 - Install it::
 
 	pip install flask-appbuilder
-	git clone https://github.com/dpgaspar/Flask-AppBuilder-Skeleton.git
+	git clone https://github.com/albertodepaola/catalog-project.git
 
 - Run it::
 
