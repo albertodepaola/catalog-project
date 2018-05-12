@@ -30,7 +30,25 @@ APP_NAME = "Catalog"
 # AUTH_DB : Is for database (username/password()
 # AUTH_LDAP : Is for LDAP
 # AUTH_REMOTE_USER : Is for using REMOTE_USER from web server
-AUTH_TYPE = AUTH_DB
+# AUTH_TYPE = AUTH_DB
+
+AUTH_TYPE = AUTH_OAUTH
+
+OAUTH_PROVIDERS = [
+    {'name': 'google', 'icon': 'fa-google', 'token_key': 'access_token',
+        'remote_app': {
+            'consumer_key': '1064038652201-u6eet3ismlvnnr57fi9rkqssh9od5pfq.apps.googleusercontent.com',
+            'consumer_secret': 'fYCma6fe5SpnvRbuJV5exy89',
+            'base_url': 'https://www.googleapis.com/oauth2/v2/',
+            'request_token_params': {
+              'scope': 'email profile'
+            },
+            'request_token_url': None,
+            'access_token_url': 'https://accounts.google.com/o/oauth2/token',
+            'authorize_url': 'https://accounts.google.com/o/oauth2/auth'}
+    }
+]
+
 
 # Uncomment to setup Full admin role name
 #AUTH_ROLE_ADMIN = 'Admin'
@@ -39,10 +57,10 @@ AUTH_TYPE = AUTH_DB
 #AUTH_ROLE_PUBLIC = 'Public'
 
 # Will allow user self registration
-#AUTH_USER_REGISTRATION = True
+AUTH_USER_REGISTRATION = True
 
 # The default user self registration role
-#AUTH_USER_REGISTRATION_ROLE = "Public"
+AUTH_USER_REGISTRATION_ROLE = "Public"
 
 # When using LDAP Auth, setup the ldap server
 #AUTH_LDAP_SERVER = "ldap://ldapserver.new"
