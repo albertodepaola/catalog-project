@@ -1,10 +1,11 @@
-from flask import render_template
+from flask import render_template, session, redirect
 from app import appbuilder, db
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from flask_appbuilder import ModelView
+from flask_appbuilder import ModelView, IndexView
 from app.models import Category, Item
 
 from flask_appbuilder.fieldwidgets import BS3TextAreaFieldWidget, TextField
+from app.widgets import BS3TextFieldROWidget
 
 
 """
@@ -22,11 +23,21 @@ from flask_appbuilder.fieldwidgets import BS3TextAreaFieldWidget, TextField
 """
 
 
+def check_logged_user(item):
+    user_id = session['user_id']
+    if item.user_id != int(user_id):
+        raise ValueError("Cannot modify this record, created by another user")
+
+
 class ItemModelView(ModelView):
     datamodel = SQLAInterface(Item)
 
     label_columns = {'category': 'Category'}
     list_columns = ['title', 'description', 'category']
+    visible_columns = ['title', 'description', 'category']
+
+    add_columns = visible_columns
+    edit_columns = visible_columns
 
     show_fieldsets = [
                         (
@@ -43,10 +54,52 @@ class ItemModelView(ModelView):
                                                        description='Item description',
                                                        widget=BS3TextAreaFieldWidget())}
 
+    def pre_add(self, item):
+        user_id = session['user_id']
+        item.user_id = user_id
+
+    def pre_update(self, item):
+        self.check_logged_user(item)
+
+    def prefill_form(self, form, pk):
+        # Checks if logged user is the creator
+        category = self.datamodel.get(pk)
+        user_id = session['user_id']
+        if category.user_id != int(user_id):
+            form.title.widget = BS3TextFieldROWidget()
+
+    def pre_delete(self, item):
+        # checks if user logged is the creator
+        self.check_logged_user(item)
+
 
 class CategoryModelView(ModelView):
     datamodel = SQLAInterface(Category)
     related_views = [ItemModelView]
+
+    visible_columns = ['name']
+
+    add_columns = visible_columns
+    edit_columns = visible_columns
+
+    def pre_add(self, item):
+        user_id = session['user_id']
+        item.user_id = user_id
+
+    def pre_update(self, item):
+        self.check_logged_user(item)
+
+    def prefill_form(self, form, pk):
+        # Checks if logged user is the creator
+        category = self.datamodel.get(pk)
+        user_id = session['user_id']
+        if category.user_id != int(user_id):
+            form.name.widget = BS3TextFieldROWidget()
+
+    def pre_delete(self, item):
+        # checks if user logged is the creator
+        self.check_logged_user(item)
+
 
 
 """
@@ -69,3 +122,4 @@ appbuilder.add_view(ItemModelView,
                     "List Items",
                     icon="fa-envelope",
                     category="Catalog")
+
