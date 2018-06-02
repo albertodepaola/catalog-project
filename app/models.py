@@ -31,21 +31,22 @@ class Item(Model):
     category = relationship("Category")
     user_id = Column(Integer)
 
+
     def __repr__(self):
         return f'{self.title} ({self.id}) - {self.category.name}'
 
 
-class User(Model):
-    __tablename__ = 'user'
-    id = Column(Integer, primary_key=True)
-    username = Column(String(32), index=True)
-    password_hash = Column(String(64))
-
-    def hash_password(self, password):
-        self.password_hash = pwd_context.encrypt(password)
-
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
-
-    def __repr__(self):
-        return f'{self.id} - {self.username}'
+# class User(Model):
+#     __tablename__ = 'user'
+#     id = Column(Integer, primary_key=True)
+#     username = Column(String(32), index=True)
+#     password_hash = Column(String(64))
+#
+#     def hash_password(self, password):
+#         self.password_hash = pwd_context.encrypt(password)
+#
+#     def verify_password(self, password):
+#         return pwd_context.verify(password, self.password_hash)
+#
+#     def __repr__(self):
+#         return f'{self.id} - {self.username}'
