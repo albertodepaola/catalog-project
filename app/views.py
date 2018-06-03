@@ -1,9 +1,10 @@
-from flask import render_template, session, redirect
+from flask import render_template, session, redirect, make_response
 from app import appbuilder, db
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from flask_appbuilder import ModelView, IndexView, expose, BaseView
 from app.models import Category, Item
-
+import json
+import pickle
 from flask_appbuilder.fieldwidgets import BS3TextAreaFieldWidget, TextField
 from app.widgets import BS3TextFieldROWidget, BS3TextAreaFieldROWidget, Select2ROWWidget
 
@@ -82,6 +83,31 @@ class CategoryModelView(ModelView):
 
     add_columns = visible_columns
     edit_columns = visible_columns
+
+    @expose("/category")
+    def json(self):
+
+        categories = []
+
+        for category in self.datamodel.query()[1]:
+
+            copy = category.to_json()
+
+            items = self.appbuilder.get_session.query(Item).filter(Item.category_id == category.id).all()
+
+            items_json = []
+            for item in items:
+                items_json.append(item.to_json())
+
+            copy['Item'] = items_json
+
+            categories.append(copy)
+
+        category_as_json = {'Category': categories}
+
+        response = make_response(json.dumps(category_as_json), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
     def pre_add(self, item):
         user_id = session['user_id']
