@@ -1,7 +1,7 @@
 from flask import render_template, session
 from app import appbuilder, db
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from flask_appbuilder import ModelView
+from flask_appbuilder import ModelView, expose
 from app.models import Category, Item
 from flask_appbuilder.fieldwidgets import BS3TextAreaFieldWidget, TextField
 from app.widgets import BS3TextFieldROWidget, BS3TextAreaFieldROWidget
@@ -37,6 +37,11 @@ class ItemModelView(ModelView):
     add_form_extra_fields = {'description': TextField('Provide a description',
                                                       description='Item description',
                                                       widget=BS3TextAreaFieldWidget())}
+
+    @expose('/<name>')
+    def detail(self, name):
+        item = self.appbuilder.get_session.query(Item).filter(Item.title == name).one()
+        return render_template('item.html', appbuilder=self.appbuilder, item=item) 
 
     def pre_add(self, item):
         user_id = session['user_id']

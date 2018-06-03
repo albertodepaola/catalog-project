@@ -13,7 +13,7 @@
           </div>
           <div class="list-group col-md-6">
               {% for item in items %}
-              <a class="list-group-item list-group-item-action" href="/itemmodelview/edit/{{item.id}}">{{item.title}} <small> <em>({{item.category.name}})</em></small></a>
+              <a class="list-group-item list-group-item-action" href="/itemmodelview/{{item.title}}">{{item.title}} <small> <em>({{item.category.name}})</em></small></a>
               {% endfor %}
           </div>
       </div>
