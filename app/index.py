@@ -13,7 +13,7 @@ class CatalogIndexView(IndexView):
         latest_items = self.get_latest()
         categories = self.appbuilder.get_session.query(Category).order_by(Category.name).all()
 
-        return render_template('index.html', testVar='test', items=latest_items, appbuilder=self.appbuilder, categories=categories)
+        return render_template('index.html', items=latest_items, appbuilder=self.appbuilder, categories=categories)
 
     def get_latest(self):
         return self.appbuilder.get_session.query(Item).order_by(Item.id.desc()).limit(10).all()
