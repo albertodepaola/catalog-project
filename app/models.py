@@ -16,6 +16,7 @@ class Category(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     user_id = Column(Integer)
+    items = relationship('Item')
 
     def __repr__(self):
         return self.name

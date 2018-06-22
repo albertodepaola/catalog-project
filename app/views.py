@@ -41,7 +41,7 @@ class ItemModelView(ModelView):
     @expose('/<name>')
     def detail(self, name):
         item = self.appbuilder.get_session.query(Item).filter(Item.title == name).one()
-        return render_template('item.html', appbuilder=self.appbuilder, item=item) 
+        return render_template('item.html', appbuilder=self.appbuilder, item=item)
 
     def pre_add(self, item):
         user_id = session['user_id']
@@ -73,6 +73,11 @@ class CategoryModelView(ModelView):
     add_columns = visible_columns
     edit_columns = visible_columns
 
+    @expose('/<name>')
+    def detail(self, name):
+        category = self.appbuilder.get_session.query(Category).filter(Category.name == name).one()
+        return render_template('category.html', appbuilder=self.appbuilder, category=category)
+
     def pre_add(self, item):
         user_id = session['user_id']
         item.user_id = user_id
@@ -101,7 +106,7 @@ class CategoryModelView(ModelView):
 def page_not_found(e):
     return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
 
-
+# google_101978236534686716076
 db.create_all()
 
 appbuilder.add_view(CategoryModelView,

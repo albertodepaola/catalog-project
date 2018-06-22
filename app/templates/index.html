@@ -8,17 +8,41 @@
       <div class="row">
           <div class="list-group col-md-6">
               {% for category in categories %}
-              <a class="list-group-item list-group-item-action" href="/categorymodelview/edit/{{category.id}}"> {{category.name}}</a>
+                  <div class="col-md-11">
+                    <a class="list-group-item list-group-item-action" href="/categorymodelview/show/{{category.id}}"> {{category.name}}</a>
+                  </div>
+                  <div class="col-md-1">
+                    {% if not current_user.is_anonymous() %}
+                      <a    href="/categorymodelview/edit/{{category.id}}"
+                            class="btn btn-sm btn-default" data-toggle="tooltip" rel="tooltip" title data-original-title="Edit Category">
+                          <i class="fa fa-edit"></i>
+                      </a>
+                    {% endif %}
+                  </div>
               {% endfor %}
           </div>
           <div class="list-group col-md-6">
+
+              <div class="col-md-11">
+                  {% if not current_user.is_anonymous() %}
+                      <a class="" href="/itemmodelview/add">Add Item </a>
+                  {% endif %}
+              </div>
               {% for item in items %}
-              <a class="list-group-item list-group-item-action" href="/itemmodelview/{{item.title}}">{{item.title}} <small> <em>({{item.category.name}})</em></small></a>
+                <div class="col-md-11">
+                    <a class="list-group-item list-group-item-action" href="/itemmodelview/show/{{item.id}}">{{item.title}} <small> <em>({{item.category.name}})</em></small></a>
+                </div>
+                <div class="col-md-1">
+                {% if not current_user.is_anonymous() %}
+                  <a    href="/itemmodelview/edit/{{item.id}}"
+                        class="btn btn-sm btn-default" data-toggle="tooltip" rel="tooltip" title data-original-title="Edit Item">
+                      <i class="fa fa-edit"></i>
+                  </a>
+                {% endif %}
+                </div>
               {% endfor %}
           </div>
       </div>
-
-
   </div>
 </div>
 {% endblock %}
