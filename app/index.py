@@ -1,12 +1,10 @@
 from flask import render_template, make_response
-from flask_appbuilder import IndexView, expose, BaseView
+from flask_appbuilder import IndexView, expose
 from app.models import Item, Category
 import json
 
 
 class CatalogIndexView(IndexView):
-    # index_template = 'index.html'
-    # base_template = 'asd'
 
     @expose('/')
     def index(self):
@@ -42,7 +40,3 @@ class CatalogIndexView(IndexView):
         response = make_response(json.dumps(category_as_json), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
-
-
-
-

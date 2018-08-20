@@ -107,7 +107,6 @@ class CategoryModelView(ModelView):
 def page_not_found(e):
     return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
 
-# google_101978236534686716076
 db.create_all()
 
 appbuilder.add_view(CategoryModelView,
