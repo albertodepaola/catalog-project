@@ -7,6 +7,8 @@ from flask_appbuilder.fieldwidgets import BS3TextAreaFieldWidget, TextField
 from app.widgets import BS3TextFieldROWidget, BS3TextAreaFieldROWidget
 
 
+# Method used to check if the logged in user is the author of the record.
+# If it isn't, it raises an error.
 def check_logged_user(item):
     user_id = session['user_id']
     if item.user_id != int(user_id):
@@ -39,6 +41,7 @@ class ItemModelView(ModelView):
                                                       description='Item description',
                                                       widget=BS3TextAreaFieldWidget())}
 
+    # adds custom endpoint to query items by name
     @expose('/<name>')
     def detail(self, name):
         item = self.appbuilder.get_session.query(Item).filter(Item.title == name).one()
@@ -52,16 +55,16 @@ class ItemModelView(ModelView):
         check_logged_user(item)
 
     def prefill_form(self, form, pk):
-        # Checks if logged user is the creator
+        # checks if the logged in user is the author, if it's not, shows data readonly
         category = self.datamodel.get(pk)
         user_id = session['user_id']
         if category.user_id != int(user_id):
             form.title.widget = BS3TextFieldROWidget()
             form.description.widget = BS3TextAreaFieldROWidget()
+            # TODO create a readonly widget that works correctly
             # form.category.widget = Select2ROWWidget()
 
     def pre_delete(self, item):
-        # checks if the logged in user is the creator
         check_logged_user(item)
 
 
@@ -74,6 +77,7 @@ class CategoryModelView(ModelView):
     add_columns = visible_columns
     edit_columns = visible_columns
 
+    # adds custom endpoint to query categories by name
     @expose('/<name>')
     def detail(self, name):
         category = self.appbuilder.get_session.query(Category).filter(Category.name == name).one()
@@ -87,14 +91,13 @@ class CategoryModelView(ModelView):
         check_logged_user(item)
 
     def prefill_form(self, form, pk):
-        # Checks if logged user is the creator
+        # checks if the logged in user is the author, if it's not, shows data readonly
         category = self.datamodel.get(pk)
         user_id = session['user_id']
         if category.user_id != int(user_id):
             form.name.widget = BS3TextFieldROWidget()
 
     def pre_delete(self, item):
-        # checks if user logged is the creator
         check_logged_user(item)
 
 
