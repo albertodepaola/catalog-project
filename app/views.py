@@ -22,11 +22,12 @@ class ItemModelView(ModelView):
 
     add_columns = visible_columns
     edit_columns = visible_columns
+    show_columns = visible_columns
 
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['title', 'category']}
+            {'fields': ['title', 'description', 'category']}
         ),
     ]
 
@@ -60,7 +61,7 @@ class ItemModelView(ModelView):
             # form.category.widget = Select2ROWWidget()
 
     def pre_delete(self, item):
-        # checks if user logged is the creator
+        # checks if the logged in user is the creator
         check_logged_user(item)
 
 

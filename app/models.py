@@ -11,7 +11,6 @@ AuditMixin will add automatic timestamp of created and modified by who
 
 """
 
-
 class Category(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
