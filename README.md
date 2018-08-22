@@ -4,7 +4,7 @@ It uses BootStrap CSS and JS, BootsWatch Themes and Font-Awesome CSS and Fonts.
 
 
 ## Installation
-
+This project requires python3.6 or latter.
 First, clone the project from github:
 
     ```
