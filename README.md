@@ -13,7 +13,7 @@ This project requires python3.6 or latter. In order to facilitate creating many 
     virtualenv -p python3.6 envname;
     source envname/bin/activate;
     pip install -r requirements.txt;
-    fabmanager run --host 127.0.0.1 --port 8000;
+    fabmanager run --host 127.0.0.1 --port 8080;
     
 To install using virtualenv on Windows 10 with python 3.7 already installed using PowerShell:
     
@@ -23,7 +23,7 @@ To install using virtualenv on Windows 10 with python 3.7 already installed usin
     virtualenv envname; # on windows I've noticed that you have to hit enter to see when it finishes
     .\envname\Scripts\activate.bat;
     pip install -r requirements.txt;
-    fabmanager run --host 127.0.0.1 --port 8000;
+    fabmanager run --host 127.0.0.1 --port 8080;
 
     
 On the first run, the database is empty. Login using google and you will be granted full admin rights (ginormous security flaw...), then it's possible to create categories from the top menu 'Catalog' -> 'List Categories'. After the first category is created, new items can be added to it from the main page.
