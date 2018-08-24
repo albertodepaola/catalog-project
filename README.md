@@ -29,6 +29,8 @@ To install using virtualenv on Windows 10 with python 3.7 already installed usin
 On the first run, the database is empty. Login using google and you will be granted full admin rights (ginormous security flaw...), then it's possible to create categories from the top menu 'Catalog' -> 'List Categories'. After the first category is created, new items can be added to it from the main page.
 As the app is built using Flask AppBuilder, the navigation is almost completely standard to the framework, the exception being the main page, that conforms with the project requirements.
 
+OAuth configuration can be found in the config.py file, in the `OAUTH_PROVIDERS` variable.
+
 # License
 The content of this repository is licensed under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/3.0/us/)
 
