@@ -31,6 +31,13 @@ As the app is built using Flask AppBuilder, the navigation is almost completely 
 
 OAuth configuration can be found in the config.py file, in the `OAUTH_PROVIDERS` variable.
 
+# Custom REST API
+Flask AppBuilder provides a complete REST api, but it's not working properly for this project.
+Two custom endpoint are provided to get arbitrary items or categories, for example:
+
+    http://localhost:8080/categorymodelview/1
+    http://localhost:8080/itemmodelview/1
+
 # License
 The content of this repository is licensed under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/3.0/us/)
 
