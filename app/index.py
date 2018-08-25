@@ -9,12 +9,24 @@ class CatalogIndexView(IndexView):
     @expose('/')
     def index(self):
         latest_items = self.get_latest()
-        categories = self.appbuilder.get_session.query(Category).order_by(Category.name).all()
+        categories = self.appbuilder\
+            .get_session\
+            .query(Category)\
+            .order_by(Category.name)\
+            .all()
 
-        return render_template('index.html', items=latest_items, appbuilder=self.appbuilder, categories=categories)
+        return render_template('index.html',
+                               items=latest_items,
+                               appbuilder=self.appbuilder,
+                               categories=categories)
 
     def get_latest(self):
-        return self.appbuilder.get_session.query(Item).order_by(Item.id.desc()).limit(10).all()
+        return self.appbuilder\
+            .get_session\
+            .query(Item)\
+            .order_by(Item.id.desc())\
+            .limit(10)\
+            .all()
 
     @expose("/catalog.json")
     def json(self):
@@ -25,7 +37,11 @@ class CatalogIndexView(IndexView):
 
             copy = category.to_json()
 
-            items = self.appbuilder.get_session.query(Item).filter(Item.category_id == category.id).all()
+            items = self.appbuilder\
+                .get_session\
+                .query(Item)\
+                .filter(Item.category_id == category.id)\
+                .all()
 
             items_json = []
             for item in items:
