@@ -1,10 +1,11 @@
-from flask import render_template, session
+from flask import render_template, session, make_response
 from app import appbuilder, db
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from flask_appbuilder import ModelView, expose
 from app.models import Category, Item
 from flask_appbuilder.fieldwidgets import BS3TextAreaFieldWidget, TextField
 from app.widgets import BS3TextFieldROWidget, BS3TextAreaFieldROWidget
+import json
 
 
 # Method used to check if the logged in user is the author of the record.
@@ -33,19 +34,36 @@ class ItemModelView(ModelView):
         ),
     ]
 
-    edit_form_extra_fields = {'description': TextField('Provide a description',
-                                                       description='Item description',
-                                                       widget=BS3TextAreaFieldWidget())}
+    edit_form_extra_fields = {'description':
+                              TextField('Provide a description',
+                                        description='Item description',
+                                        widget=BS3TextAreaFieldWidget())}
 
-    add_form_extra_fields = {'description': TextField('Provide a description',
-                                                      description='Item description',
-                                                      widget=BS3TextAreaFieldWidget())}
+    add_form_extra_fields = {'description':
+                             TextField('Provide a description',
+                                       description='Item description',
+                                       widget=BS3TextAreaFieldWidget())}
 
     # adds custom endpoint to query items by name
     @expose('/<name>')
     def detail(self, name):
-        item = self.appbuilder.get_session.query(Item).filter(Item.title == name).one()
-        return render_template('item.html', appbuilder=self.appbuilder, item=item)
+        item = self.appbuilder\
+            .get_session.query(Item)\
+            .filter(Item.title == name)\
+            .one()
+        return render_template('item.html',
+                               appbuilder=self.appbuilder,
+                               item=item)
+
+    @expose('/<filter_id>')
+    def as_json(self, filter_id):
+        item = self.appbuilder\
+            .get_session.query(Item)\
+            .filter(Item.id == filter_id)\
+            .one()
+        response = make_response(json.dumps(item.to_json()), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
     def pre_add(self, item):
         user_id = session['user_id']
@@ -55,7 +73,8 @@ class ItemModelView(ModelView):
         check_logged_user(item)
 
     def prefill_form(self, form, pk):
-        # checks if the logged in user is the author, if it's not, shows data readonly
+        # checks if the logged in user is the author,
+        # if it's not, shows data readonly
         category = self.datamodel.get(pk)
         user_id = session['user_id']
         if category.user_id != int(user_id):
@@ -80,8 +99,23 @@ class CategoryModelView(ModelView):
     # adds custom endpoint to query categories by name
     @expose('/<name>')
     def detail(self, name):
-        category = self.appbuilder.get_session.query(Category).filter(Category.name == name).one()
-        return render_template('category.html', appbuilder=self.appbuilder, category=category)
+        category = self.appbuilder\
+            .get_session.query(Category)\
+            .filter(Category.name == name)\
+            .one()
+        return render_template('category.html',
+                               appbuilder=self.appbuilder,
+                               category=category)
+
+    @expose('/<filter_id>')
+    def as_json(self, filter_id):
+        category = self.appbuilder\
+            .get_session.query(Category)\
+            .filter(Category.id == filter_id)\
+            .one()
+        response = make_response(json.dumps(category.to_json()), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
     def pre_add(self, item):
         user_id = session['user_id']
@@ -91,7 +125,8 @@ class CategoryModelView(ModelView):
         check_logged_user(item)
 
     def prefill_form(self, form, pk):
-        # checks if the logged in user is the author, if it's not, shows data readonly
+        # checks if the logged in user is the author,
+        # if it's not, shows data readonly
         category = self.datamodel.get(pk)
         user_id = session['user_id']
         if category.user_id != int(user_id):
@@ -108,7 +143,10 @@ class CategoryModelView(ModelView):
 
 @appbuilder.app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
+    return render_template('404.html',
+                           base_template=appbuilder.base_template,
+                           appbuilder=appbuilder), \
+           404
 
 db.create_all()
 
