@@ -1,4 +1,6 @@
-from flask_appbuilder.fieldwidgets import BS3TextFieldWidget, BS3TextAreaFieldWidget, Select2Widget
+from flask_appbuilder.fieldwidgets import (BS3TextFieldWidget,
+                                           BS3TextAreaFieldWidget,
+                                           Select2Widget)
 
 
 class BS3TextFieldROWidget(BS3TextFieldWidget):
