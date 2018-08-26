@@ -50,7 +50,7 @@ class ItemModelView(ModelView):
         item = self.appbuilder\
             .get_session.query(Item)\
             .filter(Item.title == name)\
-            .one()
+            .one_or_none()
         return render_template('item.html',
                                appbuilder=self.appbuilder,
                                item=item)
@@ -59,9 +59,13 @@ class ItemModelView(ModelView):
     def as_json(self, filter_id):
         item = self.appbuilder\
             .get_session.query(Item)\
-            .filter(Item.id == filter_id)\
-            .one()
-        response = make_response(json.dumps(item.to_json()), 200)
+            .filter(Item.id == filter_id) \
+            .one_or_none()
+        if item is None:
+            item_json = json.dumps({})
+        else:
+            item_json = json.dumps(item.to_json())
+        response = make_response(item_json, 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -101,8 +105,8 @@ class CategoryModelView(ModelView):
     def detail(self, name):
         category = self.appbuilder\
             .get_session.query(Category)\
-            .filter(Category.name == name)\
-            .one()
+            .filter(Category.name == name) \
+            .one_or_none()
         return render_template('category.html',
                                appbuilder=self.appbuilder,
                                category=category)
@@ -111,9 +115,13 @@ class CategoryModelView(ModelView):
     def as_json(self, filter_id):
         category = self.appbuilder\
             .get_session.query(Category)\
-            .filter(Category.id == filter_id)\
-            .one()
-        response = make_response(json.dumps(category.to_json()), 200)
+            .filter(Category.id == filter_id) \
+            .one_or_none()
+        if category is None:
+            category_json = json.dumps({})
+        else:
+            category_json = json.dumps(category.to_json())
+        response = make_response(category_json, 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 

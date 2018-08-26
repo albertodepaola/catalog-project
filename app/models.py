@@ -7,7 +7,7 @@ class Category(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     user_id = Column(Integer)
-    items = relationship('Item')
+    items = relationship('Item', cascade="all, delete-orphan")
 
     def __repr__(self):
         return self.name
