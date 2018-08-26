@@ -22,4 +22,4 @@ class Item(Model):
     user_id = Column(Integer)
 
     def __repr__(self):
-        return f'{self.title} ({self.id}) - {self.category.name}'
+        return self.title + ' (' + self.id + ') - ' + self.category.name
